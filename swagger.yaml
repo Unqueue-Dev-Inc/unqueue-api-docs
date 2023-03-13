@@ -108,38 +108,152 @@ paths:
           description: Success response
         "401":
           description: Unauthorized request
+    post:
+      summary: Creates a new order
+      tags:
+        - Orders
+      requestBody:
+        description: Pass a an object with order and cart data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customerData:
+                  type: object
+                  properties:
+                    userId:
+                      type: string
+                      example: testUser
+                    name:
+                      type: string
+                      example: Peter John
+                    customerEmail:
+                      type: string
+                      example: pete.john@email.com
+                    customerPhone:
+                      type: string
+                      example: +18687551234
+                order:
+                  type: object
+                  properties:
+                    cart:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            example: 1234
+                          count:
+                            type: number
+                            example: 3
+                          description:
+                            type: string
+                            example: Short description of item
+                          note:
+                            type: string
+                          price:
+                            type: number
+                            example: 60
+                          productId:
+                            type: string
+                            example: 1234
+                          title:
+                            type: string
+                            example: Large T-Shirt
+                    cashAmount:
+                      type: number
+                      example: 40
+                    deliveryAddress:
+                      type: object
+                      properties:
+                        address:
+                          type: string
+                          example: Marble Street
+                        location:
+                          type: object
+                          properties:
+                            latitude:
+                              type: number
+                              example: 10.695589
+                            longitude:
+                              type: number
+                              example: -61.628099
+                    deliveryFee:
+                      type: number
+                      example: 20
+                    deliveryWindow:
+                      type: string
+                      example: Friday 28th October 2022
+                    companyOrderId:
+                      type: string
+                      example: 09
+                    paymentMethod:
+                      type: string
+                      example: "Credit Card"
+                    source:
+                      type: string
+                      example: "wordpress"
+                    specialNotes:
+                      type: string
+                      example: "Leave at the doorstep"
+                    timeWindow:
+                      type: string
+                      example: "daytimeDelivery"
+                    total:
+                      type: number
+                      example: 80
+                    type:
+                      type: string
+                      example: "Delivery"
+
+      responses:
+        "200":
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: int64
+                    example: "123456"
+        "500":
+          description: Error response
   /dispatch/delivery-fee:
-    get:
+    post:
       summary: Gets the delivery fee between locations
       tags:
         - Dispatch
-      parameters:
-        - name: origin
-          in: query
-          description: The origin location coordinates
-          required: true
-          schema:
-            type: object
-            properties:
-              latitude:
-                type: number
-                example: 10.684133
-              longitude:
-                type: number
-                example: -61.524929
-        - name: destination
-          in: query
-          description: The destination location coordinates
-          required: true
-          schema:
-            type: object
-            properties:
-              latitude:
-                type: number
-                example: 10.684133
-              longitude:
-                type: number
-                example: -61.524929
+      requestBody:
+        description: Pass a coordinate object with latitude and longitude
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                origin:
+                  type: object
+                  properties:
+                    latitude:
+                      type: number
+                      example: 10.01242
+                    longitude:
+                      type: number
+                      example: 62.01242
+                destination:
+                  type: object
+                  properties:
+                    latitude:
+                      type: number
+                      example: 10.01242
+                    longitude:
+                      type: number
+                      example: 62.01242
       responses:
         "200":
           description: Success response
@@ -173,6 +287,41 @@ paths:
                     example: "A delivery fee could not be generated for these locations."
         "500":
           description: Error response
+  /companies/generate-api-key/{companyId}:
+    post:
+      summary: Generates a new API Key for a company
+      tags:
+        - Companies
+      parameters:
+        - name: companyId
+          in: path
+          description: ID of the company to generate the API key for
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    format: int64
+                    example: ey.abc1234.abc1
+        "500":
+          description: Error response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    format: int64
+                    example: "An API key could not be generated for these locations."
 components:
   securitySchemes:
     bearerAuth:
