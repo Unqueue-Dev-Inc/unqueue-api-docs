@@ -287,6 +287,81 @@ paths:
                     example: "A delivery fee could not be generated for these locations."
         "500":
           description: Error response
+  /dispatch/authorize-payment-for-orders:
+    post:
+      summary: Authorizes payment for a batch of orders
+      tags:
+        - Dispatch
+      requestBody:
+        description: Pass an array of order ids
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orders:
+                  type: array
+                  items:
+                    type: string
+                    example: "id01"
+      responses:
+        "200":
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  succeeded:
+                    type: array
+                    items:
+                      type: string
+                      example: "id01"
+                  failed:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        orderId:
+                          type: string
+                        error:
+                          type: string
+                  alreadyAuthorized:
+                    type: array
+                    items:
+                      type: string
+                      example: "id02"
+                  invalid:
+                    type: array
+                    description: "Order not found in DB"
+                    items:
+                      type: string
+                      example: "id03"
+        "400":
+          description: Invalid request response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    format: int64
+                    example: "No orders were provided"
+        "404":
+          description: Error response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    format: int64
+                    example: "A delivery fee could not be generated for these locations."
+        "500":
+          description: Error response
   /companies/generate-api-key/{companyId}:
     post:
       summary: Generates a new API Key for a company
