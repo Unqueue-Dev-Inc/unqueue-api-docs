@@ -60,12 +60,15 @@ paths:
       tags:
         - Orders
       requestBody:
-        description: Optional description in *Markdown*
+        description: Pass data to update the order
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Order"
+              type: object
+              properties:
+                data:
+                  $ref: "#/components/schemas/Order"
       parameters:
         - name: orderId
           in: path
