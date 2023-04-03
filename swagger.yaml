@@ -296,7 +296,7 @@ paths:
       tags:
         - Dispatch
       requestBody:
-        description: Pass an array of order ids
+        description: Pass an array of order ids and the credit card CVV. This must be passed as it is required to authorize payments and is not stored on our server.
         required: true
         content:
           application/json:
@@ -308,6 +308,9 @@ paths:
                   items:
                     type: string
                     example: "id01"
+                cvv:
+                  type: string
+                  example: 123
       responses:
         "200":
           description: Success response
