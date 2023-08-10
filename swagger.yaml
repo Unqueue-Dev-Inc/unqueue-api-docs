@@ -196,6 +196,9 @@ paths:
                     paymentMethod:
                       type: string
                       example: "Credit Card"
+                    shopperDeliveryFee:
+                      type: number
+                      example: 20
                     source:
                       type: string
                       example: "wordpress"
@@ -273,10 +276,6 @@ paths:
                     type: number
                     format: int64
                     example: 25
-                  pricingModel:
-                    type: string
-                    format: int64
-                    example: "default"
         "404":
           description: Error response
           content:
